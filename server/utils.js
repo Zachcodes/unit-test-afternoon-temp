@@ -7,9 +7,16 @@ module.exports = {
       a[v.id] = v;
       return a;
     }, {});
-    return posts.map(p => {
-      p.displayName = `${userDict[p.userId].first} ${userDict[p.userId].last}`;
-      return p;
-    });
+    // Have students refactor once the test fails passing in a user id that doesn't exist
+    return posts
+      .filter(p => userDict[p.userId])
+      .map(p => {
+        p.displayName = `${userDict[p.userId].first} ${userDict[p.userId].last}`;
+        return p;
+      });
+    // return posts.map(p => {
+    //   p.displayName = `${userDict[p.userId].first} ${userDict[p.userId].last}`;
+    //   return p;
+    // });
   },
 };
