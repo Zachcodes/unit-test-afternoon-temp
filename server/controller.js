@@ -11,8 +11,8 @@ module.exports = {
     const userPosts = posts.filter(p => p.userId === Number(userId));
     const postsObj = {
       stats: {
-        totalPostCount: posts.length,
-        totalWordCount: wordCount(posts),
+        totalPostCount: userPosts.length,
+        totalWordCount: wordCount(userPosts),
       },
       posts: userPosts,
     };
@@ -21,5 +21,9 @@ module.exports = {
   getAllPosts(req, res) {
     // Note: Generally this would be done with a join in the db but this is good practice for breaking out logic functions to test
     res.send(attachUserName(users, posts));
+  },
+  getPost(req, res) {
+    const { postId } = req.params;
+    res.send(attachUserName(users, posts.filter(p => p.id === Number(postId))));
   },
 };

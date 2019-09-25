@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import PostWidget from '../components/PostWidget';
+import Div from '../styled/Div';
+import Loading from '../components/Loading';
+import useAxios from '../customHooks';
 
 const Landing = () => {
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    async function getPosts() {
-      const { data } = await axios.get('/api/posts');
-      setPosts(data);
-    }
-    getPosts();
-  }, []);
+  const posts = useAxios('/api/posts');
+  if (!posts.length) return <Loading />;
   return (
-    <div>
+    <Div flexed direction="column" align="center">
       {posts.map(p => {
         return <PostWidget key={p.id} {...p} />;
       })}
-    </div>
+    </Div>
   );
 };
 

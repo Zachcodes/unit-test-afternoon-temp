@@ -7,6 +7,7 @@ const app = express();
 app.get('/api/user/:userId', c.getUser);
 
 // posts endpoints
+app.get('/api/post/:postId', c.getPost);
 app.get('/api/posts', c.getAllPosts);
 app.get('/api/user/posts/:userId', c.getUserPosts);
 

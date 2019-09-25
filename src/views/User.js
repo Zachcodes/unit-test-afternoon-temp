@@ -1,36 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import StatsWidget from '../components/StatsWidget';
 import ProfileWidget from '../components/ProfileWidget';
 import PostWidget from '../components/PostWidget';
+import Div from '../styled/Div';
+import Loading from '../components/Loading';
+import useAxios from '../customHooks';
 
 const User = ({ match }) => {
-  const [user, setUser] = useState({});
-  const [postObj, setPosts] = useState({});
-  useEffect(() => {
-    async function getUser() {
-      const { data } = await axios.get(`/api/user/${match.params.userId}`);
-      setUser(data);
-    }
-    getUser();
-    async function getUserPosts() {
-      const { data } = await axios.get(
-        `/api/user/posts/${match.params.userId}`,
-      );
-      setPosts(data);
-    }
-    getUserPosts();
-  }, [match.params.userId]);
+  const user = useAxios(`/api/user/${match.params.userId}`);
+  const postObj = useAxios(`/api/user/posts/${match.params.userId}`);
 
-  if (!Object.keys(postObj).length) return <div>Loading...</div>;
+  if (!Object.keys(postObj).length) return <Loading />;
 
   return (
     <div>
-      <ProfileWidget {...user} />
-      <StatsWidget {...postObj.stats} />
-      {postObj.posts.map(p => (
-        <PostWidget showLink={false} key={p.id} {...p} />
-      ))}
+      <Div flexed justify="center" align="center">
+        <ProfileWidget {...user} />
+      </Div>
+      <Div flexed align="center" direction="column" position="relative">
+        {postObj.posts.map(p => (
+          <PostWidget showLink={false} key={p.id} {...p} />
+        ))}
+        <StatsWidget {...postObj.stats} />
+      </Div>
     </div>
   );
 };
